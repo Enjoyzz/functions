@@ -1,0 +1,19 @@
+{
+    "name": "enjoys/functions",
+    "description": "php functions",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Enjoys",
+            "email": "deadly.info@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6"
+    },
+    "require-dev": {
+    },    
+    "autoload": {
+        "files": ["functions/dump.php"]
+    }
+}
