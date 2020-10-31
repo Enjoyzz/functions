@@ -1,5 +1,7 @@
 <?php
 
+namespace Enjoys;
+
 /**
  * 
  * Подсвечивает представление переменной, функцией highlight_string
@@ -18,16 +20,19 @@
  * _var_export($var)
  * dump($var)
  */
-function _var_dump($var, ...$vars) {
+function _var_dump($var, ...$vars)
+{
     ob_start();
     var_dump($var, ...$vars);
     echo '<pre>' . highlight_string("<?php\n" . str_replace('\\\\', '\\', ob_get_clean()) . "\n?>", true) . '</pre><br />';
 }
 
-function _var_export($var) {
+function _var_export($var)
+{
     echo '<pre>' . highlight_string("<?php\n" . str_replace('\\\\', '\\', var_export($var, true)) . "\n?>", true) . '</pre><br />';
 }
 
-function dump($var) {
+function dump($var)
+{
     echo _var_export($var);
 }
