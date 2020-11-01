@@ -20,7 +20,7 @@
 >
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">../functions/</directory>
+            <directory suffix=".php">../functions</directory>
         </include>
     </coverage>
     <testsuites>
