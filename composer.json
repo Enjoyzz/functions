@@ -16,7 +16,6 @@
     },    
     "autoload": {
         "files": [
-            "functions/dump.php",
             "functions/convertsize.php",
             "functions/array.php"
         ]
