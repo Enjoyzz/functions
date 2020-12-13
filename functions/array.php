@@ -5,11 +5,11 @@
  * @param array $data
  * @return mixed
  */
-function getValueByIndexPath($indexPath, $data = [])
+function getValueByIndexPath(string $indexPath, $data = [])
     {
         $empty_key = 0;
 
-        preg_match_all("/^([\w\d]*)|\[['\"]*(|[a-z0-9_-]+)['\"]*\]/i", $indexPath, $matches);
+        preg_match_all("/^([\w\d]*)|\[['\"]*(|[a-z0-9_-]+)['\"]*]/i", $indexPath, $matches);
         $last_key = array_key_last($matches[0]);
 
         if (count($matches[0]) > 0 && !empty($matches[0][0])) {

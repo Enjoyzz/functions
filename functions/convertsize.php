@@ -5,7 +5,7 @@
  * @param string|int $phpIniSize
  * @return int
  */
-function iniSize2bytes($phpIniSize)
+function iniSize2bytes($phpIniSize): int
 {
     $unit = preg_replace('/[^bkmgtp]/i', '', $phpIniSize); // Remove the non-unit characters from the size.
     $size = preg_replace('/[^0-9.]/', '', $phpIniSize); // Remove the non-numeric characters from the size.
@@ -22,7 +22,7 @@ function iniSize2bytes($phpIniSize)
  * @param int $size
  * @return string
  */
-function bytes2iniSize($size = 0)
+function bytes2iniSize($size = 0): string
 {
     $size = (int) $size;
     $filesizename = ["B", "K", "M", "G", "T", "P"];
