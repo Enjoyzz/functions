@@ -18,7 +18,8 @@
         "files": [
             "functions/convertsize.php",
             "functions/array.php",
-            "functions/debug.php"
+            "functions/debug.php",
+            "functions/filesystem.php"
         ]
     }
 }
