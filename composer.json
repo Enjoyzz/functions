@@ -1,6 +1,6 @@
 {
     "name": "enjoys/functions",
-    "description": "php functions",
+    "description": "php helper functions",
     "license": "MIT",
     "authors": [
         {
