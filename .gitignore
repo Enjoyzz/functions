@@ -1,8 +1,1 @@
 /vendor/
-/nbproject/
-/.idea/
-/tests/coverage/
-/coverage/
-/*.cache
-.phpunit.result.cache
-
