@@ -45,3 +45,29 @@ function getValueByIndexPath(string $indexPath, $data = [])
         }
         return false;
     }
+
+function array_merge_recursive_distinct(array $array_o, array $array_i): array
+{
+    foreach ($array_i as $k => $v) {
+        if (!isset($array_o[$k])) {
+            $array_o[$k] = $v;
+        } else {
+            if (is_array($array_o[$k])) {
+                if (is_array($v)) {
+                    $array_o[$k] = array_merge_recursive_distinct($array_o[$k], $v);
+                } else {
+                    $array_o[$k] = $v;
+                }
+            } else {
+                if (!isset($array_o[$k])) {
+                    $array_o[$k] = $v;
+                } else {
+                    $array_o[$k] = array($array_o[$k]);
+                    $array_o[$k] = $v;
+                }
+            }
+        }
+    }
+
+    return $array_o;
+}

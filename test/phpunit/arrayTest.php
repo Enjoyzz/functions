@@ -3,19 +3,20 @@
 declare(strict_types=1);
 
 namespace Test\Enjoys\Functions;
+
+
+use PHPUnit\Framework\TestCase;
 /**
- * Description of arrayTest
- *
- * @author Enjoys
+ * Class arrayTest
+ * @package Test\Enjoys\Functions
  */
-class arrayTest extends \PHPUnit\Framework\TestCase
+class arrayTest extends TestCase
 {
     /**
      * @dataProvider data_getValueByIndexPath
      */
     public function test_getValueByIndexPath($indexPath, $expect)
     {
-
         $arrays = [
             'foo' => [
                 'bar' => 'bar1',
@@ -29,12 +30,14 @@ class arrayTest extends \PHPUnit\Framework\TestCase
             'arrays' => [
             ],
             'fff' => [
-                1, 2
+                1,
+                2
             ],
             'test' => [
                 [
                     [
-                        25, 11
+                        25,
+                        11
                     ]
                 ]
             ],
@@ -83,17 +86,96 @@ class arrayTest extends \PHPUnit\Framework\TestCase
             ['baz[][][]', 'ddd'],
             ['test[][][0]', 25],
             ['fff', [1, 2]],
-            ['foo[]', [
+            [
+                'foo[]',
+                [
                     'bar' => 'bar1',
                     'name' => 'myname',
                     4,
                     'test' => [
                         '3' => 55
                     ]
-                ]], //15
-            ['test[][][]', [
-                    25, 11
-                ]], //16
+                ]
+            ], //15
+            [
+                'test[][][]',
+                [
+                    25,
+                    11
+                ]
+            ], //16
         ];
+    }
+
+    public function testArrayMergeRecursiveDistinct()
+    {
+        $a1 = array(
+            88 => 1,
+            'foo' => 2,
+            'bar' => array(4),
+            'x' => 5,
+            'z' => array(
+                6,
+                'm' => 'hi',
+            ),
+        );
+        $a2 = array(
+            99 => 7,
+            'foo' => array(8),
+            'bar' => 9,
+            'y' => 10,
+            'z' => array(
+                'm' => 'bye',
+                11,
+            ),
+        );
+
+
+        //system function
+        $this->assertSame(
+            [
+                1,
+                'foo' => [
+                    2,
+                    8
+                ],
+                'bar' => [
+                    4,
+                    9
+                ],
+                'x' => 5,
+                'z' => [
+                    6,
+                    'm' => [
+                        'hi',
+                        'bye'
+                    ],
+                    11
+                ],
+                7,
+                'y' => 10,
+            ],
+            \array_merge_recursive($a1, $a2)
+        );
+
+        //distinct function
+        $this->assertSame(
+            [
+                88 => 1,
+                'foo' => [
+                    8
+                ],
+                'bar' => 9,
+                'x' => 5,
+                'z' => [
+                    11,
+                    'm' => 'bye',
+
+                ],
+                99 => 7,
+                'y' => 10,
+            ],
+            \array_merge_recursive_distinct($a1, $a2)
+        );
     }
 }
