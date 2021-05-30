@@ -1,4 +1,5 @@
 <?php
+
 namespace Enjoys\FileSystem;
 
 /**
@@ -7,7 +8,7 @@ namespace Enjoys\FileSystem;
  * @param string $mode
  * @return void
  */
-function writeFile(string $file, string $data, string  $mode = 'w')
+function writeFile(string $file, string $data, string $mode = 'w')
 {
     $f = fopen($file, $mode);
     if ($f) {
@@ -44,9 +45,9 @@ function removeDirectoryRecursive(string $path, $removeParent = false)
     foreach ($ri as $file) {
         if ($file->isLink()) {
             $symlink = realpath($file->getPath()) . DIRECTORY_SEPARATOR . $file->getFilename();
-            if(PHP_OS_FAMILY == 'Windows'){
+            if (PHP_OS_FAMILY == 'Windows') {
                 (is_dir($symlink)) ? rmdir($symlink) : unlink($symlink);
-            }else{
+            } else {
                 unlink($symlink);
             }
             continue;
@@ -55,5 +56,26 @@ function removeDirectoryRecursive(string $path, $removeParent = false)
     }
     if ($removeParent) {
         rmdir($path);
+    }
+}
+
+/**
+ * @throws \Exception
+ */
+function copyDirectoryWithFilesRecursive($source, $target)
+{
+    createDirectory($target, 0755);
+
+    foreach (
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
+        ) as $item
+    ) {
+        if ($item->isDir()) {
+            mkdir($target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        } else {
+            copy($item, $target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        }
     }
 }
