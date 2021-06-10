@@ -7,6 +7,7 @@ namespace Enjoys\FileSystem;
  * @param string $data
  * @param string $mode
  * @return void
+ * @throws \Exception
  */
 function writeFile(string $file, string $data, string $mode = 'w')
 {
@@ -23,7 +24,7 @@ function writeFile(string $file, string $data, string $mode = 'w')
  * @return bool
  * @throws \Exception
  */
-function createDirectory(string $path, int $permissions = 0777): bool
+function createDirectory(string $path, int $permissions = 0755): bool
 {
     if (preg_match("/(\/\.+|\.+)$/i", $path)) {
         throw new \Exception(
@@ -74,7 +75,7 @@ function removeDirectoryRecursive(string $path, $removeParent = false)
  */
 function copyDirectoryWithFilesRecursive($source, $target)
 {
-    createDirectory($target, 0755);
+    createDirectory($target);
 
     $iterator = new \RecursiveIteratorIterator(
         new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
