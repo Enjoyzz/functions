@@ -9,8 +9,11 @@ namespace Enjoys\FileSystem;
  * @return void
  * @throws \Exception
  */
-function writeFile(string $file, string $data, string $mode = 'w')
+function writeFile(string $file, string $data = '', string $mode = 'w')
 {
+    $dirname = dirname($file);
+    createDirectory($dirname);
+
     $f = fopen($file, $mode);
     if ($f !== false) {
         fwrite($f, $data);

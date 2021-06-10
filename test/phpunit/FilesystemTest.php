@@ -12,6 +12,7 @@ use function Enjoys\FileSystem\copyDirectoryWithFilesRecursive;
 use function Enjoys\FileSystem\createDirectory;
 use function Enjoys\FileSystem\CreateSymlink;
 use function Enjoys\FileSystem\removeDirectoryRecursive;
+use function Enjoys\FileSystem\writeFile;
 
 final class FilesystemTest extends TestCase
 {
@@ -92,5 +93,21 @@ final class FilesystemTest extends TestCase
             $fileList = array_merge($fileList, str_replace($folder, '', $file));
         }
         return $fileList;
+    }
+
+    public function testWriteFile()
+    {
+        writeFile(__DIR__.'/_temp/newfile.txt', '');
+        $this->assertTrue(file_exists(__DIR__.'/_temp/newfile.txt'));
+    }
+
+
+    public function testWriteInSubFolderFile()
+    {
+        writeFile(__DIR__.'/_temp/subfolder/newfile.txt', '');
+        $this->assertTrue(file_exists(__DIR__.'/_temp/subfolder/newfile.txt'));
+
+        writeFile(__DIR__.'/_temp/subfolder/subfolder2/newfile.txt', '');
+        $this->assertTrue(file_exists(__DIR__.'/_temp/subfolder/subfolder2/newfile.txt'));
     }
 }
