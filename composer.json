@@ -16,6 +16,9 @@
     "phpunit/phpunit": "^9.4"
   },
   "autoload": {
+    "psr-4": {
+      "Enjoys\\Functions\\": "src/"
+    },
     "files": [
       "functions/convertsize.php",
       "functions/array.php",
