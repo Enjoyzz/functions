@@ -76,16 +76,23 @@ function copyDirectoryWithFilesRecursive($source, $target)
 {
     createDirectory($target, 0755);
 
-    foreach (
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST
-        ) as $item
-    ) {
+    $iterator = new \RecursiveIteratorIterator(
+        new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+        \RecursiveIteratorIterator::SELF_FIRST
+    );
+
+    foreach ($iterator as $item) {
         if ($item->isDir()) {
-            mkdir($target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            mkdir(
+                $target . DIRECTORY_SEPARATOR
+                . str_replace($source . DIRECTORY_SEPARATOR, '', $item->getPathname())
+            );
         } else {
-            copy($item, $target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            copy(
+                $item,
+                $target . DIRECTORY_SEPARATOR
+                . str_replace($source . DIRECTORY_SEPARATOR, '', $item->getPathname())
+            );
         }
     }
 }
