@@ -22,19 +22,28 @@ namespace Enjoys\Functions;
  *
  * @license  http://creativecommons.org/licenses/by-sa/3.0/
  * @author   Nasibullin Rinat: http://orangetie.ru/, http://rin-nas.moikrug.ru/
- * @charset  UTF-8
- * @version  2.1.4
  */
-final class Hyphen
+final class Hyphenize
 {
+    const HRISTOFF_ALGORITHM = 0;
+    const KOTEROFF_ALGORITHM = 1;
+    const NASIBULLIN_ALGORITHM = 2;
 
     /**
-     *
-     * @param string|null $s
-     * @param bool $is_html
-     * @return  string|null
+     * @var int
      */
-    public function hyphenize(string $s, bool $is_html = false): ?string
+    private $algo;
+
+    /**
+     * Hyphenize constructor.
+     * @param int $algo
+     */
+    public function __construct($algo = self::KOTEROFF_ALGORITHM)
+    {
+        $this->algo = $algo;
+    }
+
+    public function handle(string $s, bool $isHtml = false): ?string
     {
         /*
           TODO
@@ -47,10 +56,10 @@ final class Hyphen
         if (strlen($s) < 4) {
             return $s;
         }#speed improve
-        if (!$is_html) {
+        if (!$isHtml) {
             $m = [$s];
             $m[3] = &$m[0];
-            return self::_hyphenize($m);
+            return $this->hyphenize($m);
         }
 
         $regexp = '/(?> #встроенный PHP, Perl, ASP код
@@ -93,10 +102,10 @@ final class Hyphen
                 #не html таги и не сущности
                 | ([^<&]++)  #3
                /sxSX';
-        return preg_replace_callback($regexp, ['self', '_hyphenize'], $s);
+        return preg_replace_callback($regexp, ['self', 'hyphenize'], $s);
     }
 
-    private function _hyphenize(array $m)
+    private function hyphenize(array $m)
     {
         if (strlen($m[0]) < 4 || !@$m[3]) {
             return $m[0];
@@ -109,12 +118,6 @@ final class Hyphen
             $l = '(?: \xd0[\x90-\xbf\x81]|\xd1[\x80-\x8f\x91]  #А-я (все)
                 | [a-zA-Z]
               )';
-
-            #буква (letter)
-            $l_en = '[a-zA-Z]';
-            #буква (letter)
-            $l_ru = '(?: \xd0[\x90-\xbf\x81]|\xd1[\x80-\x8f\x91]  #А-я (все)
-                 )';
 
             #гласная (vowel)
             $v = '(?: \xd0[\xb0\xb5\xb8\xbe]|\xd1[\x83\x8b\x8d\x8e\x8f\x91]  #аеиоуыэюяё (гласные)
@@ -131,44 +134,49 @@ final class Hyphen
             #специальные
             $x = '(?:\xd0[\x99\xaa\xac\xb9]|\xd1[\x8a\x8c])';   #ЙЪЬйъь (специальные)
 
-            if (0) {
-                #алгоритм П.Христова в модификации Дымченко и Варсанофьева
-                $rules = [
-                    # $1       $2
-                    "/($x)     ($l$l)/sxSX",
-                    "/($v)     ($v$l)/sxSX",
-                    "/($v$c)   ($c$v)/sxSX",
-                    "/($c$v)   ($c$v)/sxSX",
-                    "/($v$c)   ($c$c$v)/sxSX",
-                    "/($v$c$c) ($c$c$v)/sxSX",
-                ];
-
-                #improved rules by Dmitry Koteroff
-                $rules = [
-                    # $1       $2
-                    "/($x)     ($l$l)/sxSX",
-                    "/($v$c$c) ($c$c$v)/sxSX",
-                    "/($v$c$c) ($c$v)/sxSX",
-                    "/($v$c)   ($c$c$v)/sxSX",
-                    "/($c$v)   ($c$v)/sxSX",
-                    "/($v$c)   ($c$v)/sxSX",
-                    "/($c$v)   ($v$l)/sxSX",
-                ];
+            switch ($this->algo) {
+                case 0:
+                    # алгоритм П.Христова в модификации Дымченко и Варсанофьева
+                    $rules = [
+                        # $1       $2
+                        "/($x)     ($l$l)/sxSX",
+                        "/($v)     ($v$l)/sxSX",
+                        "/($v$c)   ($c$v)/sxSX",
+                        "/($c$v)   ($c$v)/sxSX",
+                        "/($v$c)   ($c$c$v)/sxSX",
+                        "/($v$c$c) ($c$c$v)/sxSX",
+                    ];
+                    break;
+                case 1:
+                    # improved rules by Dmitry Koteroff
+                    $rules = [
+                        # $1       $2
+                        "/($x)     ($l$l)/sxSX",
+                        "/($v$c$c) ($c$c$v)/sxSX",
+                        "/($v$c$c) ($c$v)/sxSX",
+                        "/($v$c)   ($c$c$v)/sxSX",
+                        "/($c$v)   ($c$v)/sxSX",
+                        "/($v$c)   ($c$v)/sxSX",
+                        "/($c$v)   ($v$l)/sxSX",
+                    ];
+                    break;
+                case 2:
+                default:
+                    # improved rules by Dmitry Koteroff and Rinat Nasibullin
+                    $rules = [
+                        # $1                       $2
+                        "/($x)                     ($c (?:\xcc\x81)?+ $l)/sxSX",
+                        "/($v (?:\xcc\x81)?+ $c$c) ($c$c$v)/sxSX",
+                        "/($v (?:\xcc\x81)?+ $c$c) ($c$v)/sxSX",
+                        "/($v (?:\xcc\x81)?+ $c)   ($c$c$v)/sxSX",
+                        "/($c$v (?:\xcc\x81)?+ )   ($c$v)/sxSX",
+                        "/($v (?:\xcc\x81)?+ $c)   ($c$v)/sxSX",
+                        "/($c$v (?:\xcc\x81)?+ )   ($v (?:\xcc\x81)?+ $l)/sxSX",
+                    ];
+                    break;
             }
-
-            #improved rules by Dmitry Koteroff and Rinat Nasibullin
-            $rules = [
-                # $1                       $2
-                "/($x)                     ($c (?:\xcc\x81)?+ $l)/sxSX",
-                "/($v (?:\xcc\x81)?+ $c$c) ($c$c$v)/sxSX",
-                "/($v (?:\xcc\x81)?+ $c$c) ($c$v)/sxSX",
-                "/($v (?:\xcc\x81)?+ $c)   ($c$c$v)/sxSX",
-                "/($c$v (?:\xcc\x81)?+ )   ($c$v)/sxSX",
-                "/($v (?:\xcc\x81)?+ $c)   ($c$v)/sxSX",
-                "/($c$v (?:\xcc\x81)?+ )   ($v (?:\xcc\x81)?+ $l)/sxSX",
-            ];
         }
-        #\xc2\xad = &shy;  U+00AD SOFT HYPHEN
+        # \xc2\xad = &shy;  U+00AD SOFT HYPHEN
         return preg_replace($rules, "$1\xc2\xad$2", $m[0]);
     }
 }

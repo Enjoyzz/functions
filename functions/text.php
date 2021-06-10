@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Enjoys\Functions\Text;
 
+use Enjoys\Functions\Hyphenize;
+
 /**
  * Обрезает текст вне зависимости от слов и так далее, может обрезать на полуслове
  */
@@ -123,4 +125,14 @@ function truncate(
 
     $isCut = true;
     return $return;
+}
+
+
+/**
+ * Расстановка "мягких" переносов в словах.
+ */
+function hyphenize(string $s, bool $isHtml = false, $algo = Hyphenize::KOTEROFF_ALGORITHM): ?string
+{
+    $hyphenize = new Hyphenize($algo);
+    return $hyphenize->handle($s, $isHtml);
 }
