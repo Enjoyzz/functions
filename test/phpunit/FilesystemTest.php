@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types=1);
+
+
+namespace Test\Enjoys\Functions;
+
+
+use PHPUnit\Framework\TestCase;
+
+use function Enjoys\FileSystem\createDirectory;
+use function Enjoys\FileSystem\CreateSymlink;
+use function Enjoys\FileSystem\removeDirectoryRecursive;
+
+final class FilesystemTest extends TestCase
+{
+    protected function tearDown(): void
+    {
+        removeDirectoryRecursive(__DIR__ . '/_temp');
+    }
+
+    public function dataErrorPath()
+    {
+        return [
+            [__DIR__ . '/_temp', true],
+            ['.', false],
+            ['..', false],
+            ['...', false],
+            [__DIR__ . '/...', false],
+            [__DIR__ . '/..', false],
+            [__DIR__ . '/.', false],
+            [__DIR__ . '/_temp/.s', true],
+            ['/_te<>mp', false]
+        ];
+    }
+
+    /**
+     * @dataProvider dataErrorPath
+     */
+    public function testCreateDirectoryError($path, $create)
+    {
+        if ($create === false) {
+            $this->expectException(\Exception::class);
+        }
+        createDirectory($path);
+        $this->assertDirectoryExists($path);
+    }
+
+    public function testCreateSymlinkWhenUpFolderSymlynkAlreadyExist()
+    {
+        //$this->expectWarning();
+        CreateSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/test.css');
+        CreateSymlink(__DIR__ . '/_temp/fixtures', __DIR__ . '/fixtures');
+        $this->assertTrue(true);
+    }
+}
