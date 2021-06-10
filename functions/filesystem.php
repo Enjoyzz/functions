@@ -20,7 +20,7 @@ function writeFile(string $file, string $data, string $mode = 'w')
 /**
  * @param string $path
  * @param int $permissions
- * @return void
+ * @return bool
  * @throws \Exception
  */
 function createDirectory(string $path, int $permissions = 0777)
@@ -40,7 +40,9 @@ function createDirectory(string $path, int $permissions = 0777)
                 sprintf("Не удалось создать директорию: %s! Причина: %s", $path, $error['message'])
             );
         }
+        return true;
     }
+    return false;
 }
 
 
