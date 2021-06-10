@@ -100,7 +100,7 @@ function copyDirectoryWithFilesRecursive($source, $target)
 /**
  * @throws \Exception
  */
-function CreateSymlink(string $link, string $target)
+function CreateSymlink(string $link, string $target): bool
 {
     $directory = pathinfo($link, PATHINFO_DIRNAME);
     createDirectory($directory, 0755);
@@ -114,12 +114,12 @@ function CreateSymlink(string $link, string $target)
     $linkSpl = new \SplFileInfo($link);
 
     if (($linkSpl->isLink() || $linkSpl->isFile() || $linkSpl->isDir()) && $linkSpl->isReadable()) {
-        return;
+        return false;
     }
 
     if ($linkSpl->isLink() && !$linkSpl->isReadable()) {
         unlink($linkSpl->getPathname());
     }
 
-    symlink($target, $link);
+    return symlink($target, $link);
 }
