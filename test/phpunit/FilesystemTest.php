@@ -46,11 +46,27 @@ final class FilesystemTest extends TestCase
         $this->assertDirectoryExists($path);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCreateSymlinkWhenUpFolderSymlynkAlreadyExist()
     {
         //$this->expectWarning();
         CreateSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/test.css');
+        $linkSpl = new \SplFileInfo(__DIR__ . '/_temp/fixtures/test.css');
+        $this->assertTrue($linkSpl->isLink());
+
         CreateSymlink(__DIR__ . '/_temp/fixtures', __DIR__ . '/fixtures');
-        $this->assertTrue(true);
+        $linkSpl = new \SplFileInfo(__DIR__ . '/_temp/fixtures');
+        $this->assertFalse($linkSpl->isLink());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateSymlinkWhenTargetNotExist()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        CreateSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/invalid_target');
     }
 }
