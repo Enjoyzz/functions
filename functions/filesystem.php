@@ -11,7 +11,7 @@ namespace Enjoys\FileSystem;
 function writeFile(string $file, string $data, string $mode = 'w')
 {
     $f = fopen($file, $mode);
-    if ($f) {
+    if ($f !== false) {
         fwrite($f, $data);
         fclose($f);
     }
@@ -25,6 +25,14 @@ function writeFile(string $file, string $data, string $mode = 'w')
  */
 function createDirectory(string $path, int $permissions = 0777)
 {
+    if (preg_match("/(\/\.+|\.+)$/i", $path)) {
+        throw new \Exception(
+            sprintf("Нельзя создать директорию: %s", $path)
+        );
+    }
+
+    error_clear_last();
+
     if (!is_dir($path)) {
         if (@mkdir($path, $permissions, true) === false) {
             $error = error_get_last();
@@ -78,4 +86,31 @@ function copyDirectoryWithFilesRecursive($source, $target)
             copy($item, $target . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
         }
     }
+}
+
+/**
+ * @throws \Exception
+ */
+function CreateSymlink(string $link, string $target)
+{
+    $directory = pathinfo($link, PATHINFO_DIRNAME);
+    createDirectory($directory, 0755);
+
+    if (!file_exists($target)) {
+        throw new \InvalidArgumentException(
+            sprintf("Цeлевой директории или файла не существует. Symlink на %s не создан", $target)
+        );
+    }
+
+    $linkSpl = new \SplFileInfo($link);
+
+    if (($linkSpl->isLink() || $linkSpl->isFile() || $linkSpl->isDir()) && $linkSpl->isReadable()) {
+        return;
+    }
+
+    if ($linkSpl->isLink() && !$linkSpl->isReadable()) {
+        unlink($linkSpl->getPathname());
+    }
+
+    symlink($target, $link);
 }
