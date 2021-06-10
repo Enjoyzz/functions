@@ -8,6 +8,7 @@ namespace Test\Enjoys\Functions;
 
 use PHPUnit\Framework\TestCase;
 
+use function Enjoys\FileSystem\copyDirectoryWithFilesRecursive;
 use function Enjoys\FileSystem\createDirectory;
 use function Enjoys\FileSystem\CreateSymlink;
 use function Enjoys\FileSystem\removeDirectoryRecursive;
@@ -68,5 +69,28 @@ final class FilesystemTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         CreateSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/invalid_target');
+    }
+
+    public function testCopyDirectoryWithFilesRecursive()
+    {
+        $source_dir = __DIR__ .'/fixtures';
+        $target_dir = __DIR__ .'/_temp/dd';
+        $pattern = '/.*/';
+        $globOrig = $this->getListFilesInCatalogRecursive($source_dir,$pattern );
+        copyDirectoryWithFilesRecursive($source_dir, $target_dir);
+        $this->assertSame($globOrig, $this->getListFilesInCatalogRecursive($target_dir, $pattern));
+    }
+
+    private function getListFilesInCatalogRecursive($folder, $regPattern)
+    {
+        $dir = new \RecursiveDirectoryIterator($folder, \RecursiveDirectoryIterator::SKIP_DOTS);
+        $iterator = new \RecursiveIteratorIterator($dir);
+        $files = new \RegexIterator($iterator, $regPattern, \RegexIterator::GET_MATCH);
+        $fileList = [];
+
+        foreach ($files as $file) {
+            $fileList = array_merge($fileList, str_replace($folder, '', $file));
+        }
+        return $fileList;
     }
 }
