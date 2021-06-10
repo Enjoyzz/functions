@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0"
+        "php": "^7.4|^8.0",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.4"
@@ -19,7 +20,8 @@
             "functions/convertsize.php",
             "functions/array.php",
             "functions/debug.php",
-            "functions/filesystem.php"
+            "functions/filesystem.php",
+            "functions/text.php"
         ]
     }
 }
