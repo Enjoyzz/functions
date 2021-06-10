@@ -23,7 +23,7 @@ function writeFile(string $file, string $data, string $mode = 'w')
  * @return bool
  * @throws \Exception
  */
-function createDirectory(string $path, int $permissions = 0777)
+function createDirectory(string $path, int $permissions = 0777): bool
 {
     if (preg_match("/(\/\.+|\.+)$/i", $path)) {
         throw new \Exception(
