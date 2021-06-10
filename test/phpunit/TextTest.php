@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use function Enjoys\Functions\Text\truncate;
 use function Enjoys\Functions\Text\truncateSimple;
 
-final class textTest extends TestCase
+final class TextTest extends TestCase
 {
     public function dataTruncateSimple(): array
     {

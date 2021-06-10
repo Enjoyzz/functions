@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  * Class arrayTest
  * @package Test\Enjoys\Functions
  */
-class arrayTest extends TestCase
+class ArrayTest extends TestCase
 {
     /**
      * @dataProvider data_getValueByIndexPath
