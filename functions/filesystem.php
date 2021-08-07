@@ -27,7 +27,7 @@ function writeFile(string $file, string $data = '', string $mode = 'w')
  * @return bool
  * @throws \Exception
  */
-function createDirectory(string $path, int $permissions = 0755): bool
+function createDirectory(string $path, int $permissions = 0775): bool
 {
     if (preg_match("/(\/\.+|\.+)$/i", $path)) {
         throw new \Exception(
@@ -107,7 +107,7 @@ function copyDirectoryWithFilesRecursive($source, $target)
 function CreateSymlink(string $link, string $target): bool
 {
     $directory = pathinfo($link, PATHINFO_DIRNAME);
-    createDirectory($directory, 0755);
+    createDirectory($directory);
 
     if (!file_exists($target)) {
         throw new \InvalidArgumentException(
