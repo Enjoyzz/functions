@@ -6,9 +6,10 @@ declare(strict_types=1);
 namespace Enjoys\Functions\TwigExtension;
 
 
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-final class ConvertSize
+final class ConvertSize extends AbstractExtension
 {
     public function getFilters()
     {
