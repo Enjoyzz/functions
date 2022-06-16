@@ -49,7 +49,9 @@ class ArrayTest extends TestCase
                         'ddd'
                     ]
                 ]
-            ]
+            ],
+            'my' => 'my',
+            'my-var' => 'my-var',
         ];
         $this->assertEquals($expect, \getValueByIndexPath($indexPath, $arrays));
     }
@@ -104,6 +106,8 @@ class ArrayTest extends TestCase
                     11
                 ]
             ], //16
+            ['my', 'my'],
+            ['my-var', 'my-var'],
         ];
     }
 
