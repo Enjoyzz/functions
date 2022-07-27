@@ -71,3 +71,18 @@ function array_merge_recursive_distinct(array $array_o, array $array_i): array
 
     return $array_o;
 }
+
+
+
+function array_insert_before(array $array, $key, $data): array
+{
+    $insert = new \Enjoys\Functions\Arrays\ArrayInsert($array);
+    return $insert->before($key, $data);
+}
+
+
+function array_insert_after(array $array, $key, $data): array
+{
+    $insert = new \Enjoys\Functions\Arrays\ArrayInsert($array);
+    return $insert->after($key, $data);
+}
