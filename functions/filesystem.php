@@ -2,6 +2,8 @@
 
 namespace Enjoys\FileSystem;
 
+use FilesystemIterator;
+
 /**
  * @param string $file
  * @param string $data
@@ -81,13 +83,13 @@ function copyDirectoryWithFilesRecursive($source, $target)
     createDirectory($target);
 
     $iterator = new \RecursiveIteratorIterator(
-        new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+        new \RecursiveDirectoryIterator($source, FilesystemIterator::SKIP_DOTS),
         \RecursiveIteratorIterator::SELF_FIRST
     );
 
     foreach ($iterator as $item) {
         if ($item->isDir()) {
-            mkdir(
+            createDirectory(
                 $target . DIRECTORY_SEPARATOR
                 . str_replace($source . DIRECTORY_SEPARATOR, '', $item->getPathname())
             );
