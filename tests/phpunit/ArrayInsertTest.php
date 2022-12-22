@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Enjoys\Functions;
+namespace Tests\Enjoys\Functions;
 
 use PHPUnit\Framework\TestCase;
 

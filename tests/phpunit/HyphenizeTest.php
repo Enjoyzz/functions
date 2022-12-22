@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Enjoys\Functions;
+
 use PHPUnit\Framework\TestCase;
 
 use function Enjoys\Functions\Text\hyphenize;

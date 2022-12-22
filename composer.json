@@ -31,8 +31,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\Enjoys\\Functions\\": "tests/",
-      "Benchmark\\Enjoys\\": "benchmark/"
+      "Tests\\Enjoys\\Functions\\": "tests/phpunit/",
+      "Benchmark\\Enjoys\\": "tests/benchmark/"
     }
   }
 }

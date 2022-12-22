@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Tests\Enjoys\Functions;
+
 use PHPUnit\Framework\TestCase;
 
 class ConvertsizeTest extends TestCase
