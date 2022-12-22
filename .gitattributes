@@ -1,1 +1,5 @@
 * text=auto eol=lf
+
+/.* export-ignore
+/tests export-ignore
+/phpbench.json export-ignore
