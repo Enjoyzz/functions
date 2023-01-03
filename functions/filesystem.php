@@ -145,3 +145,11 @@ function CreateSymlink(string $link, string $target): bool
 
     return symlink($target, $link);
 }
+
+/**
+ * @throws \Exception
+ */
+function makeSymlink(string $link, string $target): bool
+{
+    return CreateSymlink($link, $target);
+}
