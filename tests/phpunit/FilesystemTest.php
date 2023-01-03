@@ -108,4 +108,12 @@ final class FilesystemTest extends TestCase
         writeFile(__DIR__.'/_temp/subfolder/subfolder2/newfile.txt', '');
         $this->assertTrue(file_exists(__DIR__.'/_temp/subfolder/subfolder2/newfile.txt'));
     }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testRemoveDirectoryRecursiveIfNotExists()
+    {
+        removeDirectoryRecursive(__DIR__ . '/'.uniqid());
+    }
 }
