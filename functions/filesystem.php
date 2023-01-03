@@ -24,6 +24,18 @@ function writeFile(string $file, string $data = '', string $mode = 'w')
 }
 
 /**
+ * Alias for writeFile
+ * @param string $file
+ * @param string $data
+ * @param string $mode
+ * @throws \Exception
+ */
+function createFile(string $file, string $data = '', string $mode = 'w')
+{
+    writeFile($file, $data, $mode);
+}
+
+/**
  * @param string $path
  * @param int $permissions
  * @return bool
@@ -105,6 +117,7 @@ function copyDirectoryWithFilesRecursive($source, $target)
         }
     }
 }
+
 
 /**
  * @throws \Exception
