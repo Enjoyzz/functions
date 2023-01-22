@@ -7,6 +7,7 @@ namespace Tests\Enjoys\Functions;
 use PHPUnit\Framework\TestCase;
 
 use function Enjoys\FileSystem\copyDirectoryWithFilesRecursive;
+use function Enjoys\FileSystem\copyFile;
 use function Enjoys\FileSystem\createDirectory;
 use function Enjoys\FileSystem\CreateSymlink;
 use function Enjoys\FileSystem\removeDirectoryRecursive;
@@ -115,5 +116,14 @@ final class FilesystemTest extends TestCase
     public function testRemoveDirectoryRecursiveIfNotExists()
     {
         removeDirectoryRecursive(__DIR__ . '/'.uniqid());
+    }
+
+    public function testCopyFile()
+    {
+        copyFile($source = __DIR__.'/fixtures/test.css', $target = __DIR__.'/_temp/1/2/3/4/5/new_file');
+        $this->assertSame(
+            file_get_contents($source),
+            file_get_contents($target)
+        );
     }
 }

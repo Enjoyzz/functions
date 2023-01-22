@@ -66,7 +66,7 @@ function createDirectory(string $path, int $permissions = 0775): bool
 
 function removeDirectoryRecursive(string $path, $removeParent = false)
 {
-    if (!file_exists($path)){
+    if (!file_exists($path)) {
         return;
     }
     $di = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
@@ -116,6 +116,16 @@ function copyDirectoryWithFilesRecursive($source, $target)
             );
         }
     }
+}
+
+/**
+ * @throws \Exception
+ */
+function copyFile($source, $target): bool
+{
+    $dir = dirname($target);
+    createDirectory($dir);
+    return copy($source, $target);
 }
 
 
