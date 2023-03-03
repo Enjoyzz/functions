@@ -128,11 +128,10 @@ function copyFile($source, $target): bool
     return copy($source, $target);
 }
 
-
 /**
  * @throws \Exception
  */
-function CreateSymlink(string $link, string $target): bool
+function makeSymlink(string $link, string $target): bool
 {
     $directory = pathinfo($link, PATHINFO_DIRNAME);
     createDirectory($directory);
@@ -156,10 +155,13 @@ function CreateSymlink(string $link, string $target): bool
     return symlink($target, $link);
 }
 
+
 /**
  * @throws \Exception
+ * @deprecated
  */
-function makeSymlink(string $link, string $target): bool
+function CreateSymlink(string $link, string $target): bool
 {
-    return CreateSymlink($link, $target);
+    return makeSymlink($link, $target);
+
 }
