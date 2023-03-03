@@ -165,3 +165,27 @@ function CreateSymlink(string $link, string $target): bool
     return makeSymlink($link, $target);
 
 }
+
+/**
+ * @template T of bool
+ * @psalm-param  T $false_return
+ * @return (T is true ? array|false : array)
+ * @link https://stackoverflow.com/questions/17160696/php-glob-scan-in-subfolders-for-a-file
+ */
+function glob_recursive(string $pattern, int $flags = 0, bool $false_return = false)
+{
+    $files = glob($pattern, $flags);
+
+    if ($false_return && $files === false){
+        return false;
+    }
+
+    foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+        $files = array_merge(
+            $files,
+            glob_recursive($dir . "/" . basename($pattern), $flags)
+        );
+    }
+
+    return $files ?: [];
+}
