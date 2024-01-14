@@ -6,7 +6,6 @@ namespace Tests\Enjoys\Functions;
 
 use PHPUnit\Framework\TestCase;
 
-use function Enjoys\Functions\Text\hyphenize;
 
 class HyphenizeTest extends TestCase
 {

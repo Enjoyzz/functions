@@ -6,8 +6,6 @@ namespace Tests\Enjoys\Functions;
 
 use PHPUnit\Framework\TestCase;
 
-use function Enjoys\Functions\Text\truncate;
-use function Enjoys\Functions\Text\truncateSimple;
 
 final class TextTest extends TestCase
 {

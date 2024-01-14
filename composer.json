@@ -22,10 +22,8 @@
       "Enjoys\\Functions\\": "src/"
     },
     "files": [
-      "functions/convertsize.php",
-      "functions/array.php",
-      "functions/filesystem.php",
-      "functions/text.php"
+      "functions.php",
+      "functions/filesystem.php"
     ]
   },
   "autoload-dev": {
