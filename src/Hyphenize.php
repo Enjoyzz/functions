@@ -39,9 +39,6 @@ final class Hyphenize
          */
 
         $s = str_replace("\xc2\xad", '', $s);  #remove all hyphens (repair text)
-        if (strlen($s) < 4) {
-            return $s;
-        }
 
         $m = [$s];
         $m[3] = &$m[0];
@@ -50,7 +47,7 @@ final class Hyphenize
 
     private static function hyphenize(array $m, int $algo)
     {
-        if (strlen($m[0]) < 4 || !@$m[3]) {
+        if (mb_strlen($m[0]) < 4 || !@$m[3]) {
             return $m[0];
         }
 

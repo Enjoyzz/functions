@@ -40,6 +40,7 @@ class HyphenizeTest extends TestCase
             [['процедура',  Hyphenize::HRISTOFF_ALGORITHM], 'про­цеду­ра'],
             [['процедура',  Hyphenize::KOTEROFF_ALGORITHM], 'про­цеду­ра'],
             [['процедура',  Hyphenize::NASIBULLIN_ALGORITHM], 'про­цеду­ра'],
+            [['йод'], 'йод'],
         ];
     }
 
