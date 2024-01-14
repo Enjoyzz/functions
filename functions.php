@@ -19,8 +19,7 @@ if (!function_exists('truncate')) {
         int $tailMinLength = 20,
         ?bool &$isCut = null
     ): ?string {
-        $truncate = new Truncate($text);
-        return $truncate->smartTruncate($maxlength, $continue, $tailMinLength, $isCut);
+        return Truncate::smartTruncate($text, $maxlength, $continue, $tailMinLength, $isCut);
     }
 }
 
@@ -33,8 +32,7 @@ if (!function_exists('truncate_simple')) {
      */
     function truncate_simple(string $text, int $length = 0, string $continue = "\xe2\x80\xa6"): string
     {
-        $truncate = new Truncate($text);
-        return $truncate->simpleTruncate($length, $continue);
+        return Truncate::simpleTruncate($text, $length, $continue);
     }
 }
 
@@ -48,7 +46,7 @@ if (!function_exists('truncateSimple')) {
      */
     function truncateSimple(string $text, int $length = 0, string $continue = "\xe2\x80\xa6"): string
     {
-        return truncate_simple($text, $length, $continue);
+        return Truncate::simpleTruncate($text, $length, $continue);
     }
 }
 

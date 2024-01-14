@@ -12,32 +12,24 @@ final class Truncate
 {
 
     /**
-     * @var string
-     */
-    private $origText;
-
-    /**
-     * @param string $text Текст в кодировке UTF-8
-     */
-    public function __construct(string $text)
-    {
-        $this->origText = $text;
-    }
-
-    /**
      * Обрезает текст вне зависимости от слов и так далее, может обрезать на полуслове
+     * @param string $text
+     * @param int $length
+     * @param string $continue
+     * @return string|null
      */
-    public function simpleTruncate(int $length = 0, string $continue = "\xe2\x80\xa6"): ?string
+    public static function simpleTruncate(string $text, int $length = 0, string $continue = "\xe2\x80\xa6"): ?string
     {
-        if (\mb_strlen($this->origText) <= $length) {
-            return $this->origText;
+        if (\mb_strlen($text) <= $length) {
+            return $text;
         }
-        return trim(\mb_substr($this->origText, 0, $length)) . $continue;
+        return trim(\mb_substr($text, 0, $length)) . $continue;
     }
 
     /**
      * Обрезает текст в кодировке UTF-8 до заданной длины, причём последнее слово показывается целиком,
      * а не обрывается на середине. Html сущности корректно обрабатываются
+     * @param string $text
      * @param int $maxlength Ограничение длины текста
      * @param string $continue Завершающая строка, которая будет вставлена после текста, если он обрежется
      * @param int $tailMinLength Если длина "хвоста", оставшегося после обрезки текста, меньше $tailMinLength,
@@ -46,7 +38,8 @@ final class Truncate
      * @return string|null
      * @author   Nasibullin Rinat
      */
-    public function smartTruncate(
+    public static function smartTruncate(
+        string $text,
         int $maxlength,
         string $continue = "\xe2\x80\xa6", #"\xe2\x80\xa6" = "&hellip;"
         int $tailMinLength = 20,
@@ -59,11 +52,11 @@ final class Truncate
         }
 
         # speed improve block
-        if (\mb_strlen($this->origText) <= $maxlength) {
-            return $this->origText;
+        if (\mb_strlen($text) <= $maxlength) {
+            return $text;
         }
 
-        $s2 = str_replace("\r\n", '?', $this->origText);
+        $s2 = str_replace("\r\n", '?', $text);
         $s2 = preg_replace(
             '/&(?> [a-zA-Z][a-zA-Z\d]+
                                 | \#(?> \d{1,4}
@@ -76,7 +69,7 @@ final class Truncate
         );
 
         if (\mb_strlen($s2) <= $maxlength) {
-            return $this->origText;
+            return $text;
         }
 
 
@@ -90,7 +83,7 @@ final class Truncate
 								   | .
 								 )
 								/sxuSX',
-            $this->origText,
+            $text,
             $m
         );
 
@@ -100,7 +93,7 @@ final class Truncate
 
         # d($m);
         if (count($m[0]) <= $maxlength) {
-            return $this->origText;
+            return $text;
         }
 
         $left = implode('', array_slice($m[0], 0, $maxlength));
@@ -129,14 +122,14 @@ final class Truncate
             # d($m);
             $right = isset($m[0]) ? rtrim($m[0], '.-') : '';
             $return = $left . $right;
-            if (strlen($return) !== strlen($this->origText)) {
+            if (strlen($return) !== strlen($text)) {
                 $return .= $continue;
             }
         }
 
 
-        if (\mb_strlen($this->origText) - \mb_strlen($return) < $tailMinLength) {
-            return $this->origText;
+        if (\mb_strlen($text) - \mb_strlen($return) < $tailMinLength) {
+            return $text;
         }
 
         $isCut = true;
