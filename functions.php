@@ -58,11 +58,12 @@ if (!function_exists('hyphenize')) {
      * Расстановка "мягких" переносов в словах.
      * @param string $s
      * @param int $algo \Enjoys\Functions\Hyphenize::KOTEROFF_ALGORITHM, HRISTOFF_ALGORITHM, NASIBULLIN_ALGORITHM
+     * @param int $minLengthSkip
      * @return string|null
      */
-    function hyphenize(string $s,  int $algo = Hyphenize::KOTEROFF_ALGORITHM): ?string
+    function hyphenize(string $s, int $algo = Hyphenize::KOTEROFF_ALGORITHM, int $minLengthSkip = 4): ?string
     {
-        return Hyphenize::handle($s, $algo);
+        return Hyphenize::handle($s, $algo, $minLengthSkip);
     }
 }
 

@@ -29,7 +29,7 @@ final class Hyphenize
     const KOTEROFF_ALGORITHM = 1;
     const NASIBULLIN_ALGORITHM = 2;
 
-    public static function handle(string $s, int $algo = self::KOTEROFF_ALGORITHM): ?string
+    public static function handle(string $word, int $algo = self::KOTEROFF_ALGORITHM, int $minLengthSkip = 4): ?string
     {
         /*
           TODO
@@ -37,18 +37,14 @@ final class Hyphenize
           заштри-ХУЙ, ли-ХУЯ, оскор-БЛЯТЬ, са-бля, бля-ха, ХЕР-сонская, парикма-ХЕР, ЛОХ-матый
           по-беда, бри-гады, про-раб, проце-дура, ссы-лок, попа-дает,
          */
-
-        $s = str_replace("\xc2\xad", '', $s);  #remove all hyphens (repair text)
-
-        $m = [$s];
-        $m[3] = &$m[0];
-        return self::hyphenize($m, $algo);
+        $word = str_replace("\xc2\xad", '', $word);  #remove all hyphens (repair text)
+        return self::hyphenize($word, $algo, $minLengthSkip);
     }
 
-    private static function hyphenize(array $m, int $algo)
+    private static function hyphenize(string $word, int $algo, int $minLengthSkip = 4)
     {
-        if (mb_strlen($m[0]) < 4 || !@$m[3]) {
-            return $m[0];
+        if (mb_strlen($word) < $minLengthSkip) {
+            return $word;
         }
 
 
@@ -115,6 +111,6 @@ final class Hyphenize
         }
 
         # \xc2\xad = &shy;  U+00AD SOFT HYPHEN
-        return preg_replace($rules, "$1\xc2\xad$2", $m[0]);
+        return preg_replace($rules, "$1\xc2\xad$2", $word);
     }
 }
