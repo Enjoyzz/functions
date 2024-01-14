@@ -16,7 +16,7 @@ class HyphenizeTest extends TestCase
 //            [['водоворот'], 'во­до­во­рот'],
 //            [['борода'], 'бо­ро­да'],
 //            [['лебеда'], 'ле­бе­да'],
-//            [['оскорблять'], 'ос­корб­лять'],
+            [['оскорблять'], 'ос­корб­лять'],
 //            [['бригады'], 'бри­га­ды'],
             [['своевременный'], 'сво­ев­ре­мен­ный'],
             [['парикмахер'], 'па­рик­ма­хер'],
@@ -27,7 +27,7 @@ class HyphenizeTest extends TestCase
     /**
      * @dataProvider data
      */
-    public function testHyphenyzeFunction($data, $expect)
+    public function testHyphenizeFunction($data, $expect)
     {
         $result = hyphenize(...$data);
         $this->assertSame($expect, $result);
