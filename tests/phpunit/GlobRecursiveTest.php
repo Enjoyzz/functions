@@ -8,7 +8,6 @@ namespace Tests\Enjoys\Functions;
 
 use PHPUnit\Framework\TestCase;
 
-use function Enjoys\FileSystem\glob_recursive;
 
 final class GlobRecursiveTest extends TestCase
 {
