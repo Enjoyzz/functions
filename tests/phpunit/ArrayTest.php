@@ -6,6 +6,7 @@ namespace Tests\Enjoys\Functions;
 
 
 use PHPUnit\Framework\TestCase;
+
 /**
  * Class arrayTest
  * @package Test\Enjoys\Functions
@@ -122,6 +123,11 @@ class ArrayTest extends TestCase
                 6,
                 'm' => 'hi',
             ),
+            'w' => [
+                'z' => [
+                    1
+                ]
+            ]
         );
         $a2 = array(
             99 => 7,
@@ -132,6 +138,11 @@ class ArrayTest extends TestCase
                 'm' => 'bye',
                 11,
             ),
+            'w' => [
+                'z' => [
+                    1
+                ]
+            ]
         );
 
 
@@ -156,6 +167,12 @@ class ArrayTest extends TestCase
                     ],
                     11
                 ],
+                'w' => [
+                    'z' => [
+                        1,
+                        1
+                    ]
+                ],
                 7,
                 'y' => 10,
             ],
@@ -175,6 +192,11 @@ class ArrayTest extends TestCase
                     11,
                     'm' => 'bye',
 
+                ],
+                'w' => [
+                    'z' => [
+                        1
+                    ]
                 ],
                 99 => 7,
                 'y' => 10,
