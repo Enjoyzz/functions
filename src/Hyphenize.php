@@ -121,7 +121,7 @@ final class Hyphenize
             $x = '(?:\xd0[\x99\xaa\xac\xb9]|\xd1[\x8a\x8c])';   #ЙЪЬйъь (специальные)
 
             switch ($algo) {
-                case 0:
+                case self::HRISTOFF_ALGORITHM:
                     # алгоритм П.Христова в модификации Дымченко и Варсанофьева
                     $rules = [
                         # $1       $2
@@ -133,7 +133,7 @@ final class Hyphenize
                         "/($v$c$c) ($c$c$v)/sxSX",
                     ];
                     break;
-                case 1:
+                case self::KOTEROFF_ALGORITHM:
                     # improved rules by Dmitry Koteroff
                     $rules = [
                         # $1       $2
@@ -146,7 +146,7 @@ final class Hyphenize
                         "/($c$v)   ($v$l)/sxSX",
                     ];
                     break;
-                case 2:
+                case self::NASIBULLIN_ALGORITHM:
                 default:
                     # improved rules by Dmitry Koteroff and Rinat Nasibullin
                     $rules = [
