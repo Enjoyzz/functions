@@ -43,6 +43,7 @@ final class Hyphenize
 
     private static function hyphenize(string $word, int $algo, int $minLengthSkip = 4)
     {
+        # speed improve block
         if (mb_strlen($word) < $minLengthSkip) {
             return $word;
         }
