@@ -97,71 +97,69 @@ final class Hyphenize
             return $m[0];
         }
 
-        static $rules = null;
 
-        if ($rules === null) {
-            #буква (letter)
-            $l = '(?: \xd0[\x90-\xbf\x81]|\xd1[\x80-\x8f\x91]  #А-я (все)
+        #буква (letter)
+        $l = '(?: \xd0[\x90-\xbf\x81]|\xd1[\x80-\x8f\x91]  #А-я (все)
                 | [a-zA-Z]
               )';
 
-            #гласная (vowel)
-            $v = '(?: \xd0[\xb0\xb5\xb8\xbe]|\xd1[\x83\x8b\x8d\x8e\x8f\x91]  #аеиоуыэюяё (гласные)
+        #гласная (vowel)
+        $v = '(?: \xd0[\xb0\xb5\xb8\xbe]|\xd1[\x83\x8b\x8d\x8e\x8f\x91]  #аеиоуыэюяё (гласные)
                 | \xd0[\x90\x95\x98\x9e\xa3\xab\xad\xae\xaf\x81]         #АЕИОУЫЭЮЯЁ (гласные)
                 | (?i:[aeiouy])
               )';
 
-            #согласная (consonant)
-            $c = '(?: \xd0[\xb1-\xb4\xb6\xb7\xba-\xbd\xbf]|\xd1[\x80\x81\x82\x84-\x89]  #бвгджзклмнпрстфхцчшщ (согласные)
+        #согласная (consonant)
+        $c = '(?: \xd0[\xb1-\xb4\xb6\xb7\xba-\xbd\xbf]|\xd1[\x80\x81\x82\x84-\x89]  #бвгджзклмнпрстфхцчшщ (согласные)
                 | \xd0[\x91-\x94\x96\x97\x9a-\x9d\x9f-\xa2\xa4-\xa9]                #БВГДЖЗКЛМНПРСТФХЦЧШЩ (согласные)
                 | (?i:sh|ch|qu|[bcdfghjklmnpqrstvwxz])
               )';
 
-            #специальные
-            $x = '(?:\xd0[\x99\xaa\xac\xb9]|\xd1[\x8a\x8c])';   #ЙЪЬйъь (специальные)
+        #специальные
+        $x = '(?:\xd0[\x99\xaa\xac\xb9]|\xd1[\x8a\x8c])';   #ЙЪЬйъь (специальные)
 
-            switch ($algo) {
-                case self::HRISTOFF_ALGORITHM:
-                    # алгоритм П.Христова в модификации Дымченко и Варсанофьева
-                    $rules = [
-                        # $1       $2
-                        "/($x)     ($l$l)/sxSX",
-                        "/($v)     ($v$l)/sxSX",
-                        "/($v$c)   ($c$v)/sxSX",
-                        "/($c$v)   ($c$v)/sxSX",
-                        "/($v$c)   ($c$c$v)/sxSX",
-                        "/($v$c$c) ($c$c$v)/sxSX",
-                    ];
-                    break;
-                case self::KOTEROFF_ALGORITHM:
-                    # improved rules by Dmitry Koteroff
-                    $rules = [
-                        # $1       $2
-                        "/($x)     ($l$l)/sxSX",
-                        "/($v$c$c) ($c$c$v)/sxSX",
-                        "/($v$c$c) ($c$v)/sxSX",
-                        "/($v$c)   ($c$c$v)/sxSX",
-                        "/($c$v)   ($c$v)/sxSX",
-                        "/($v$c)   ($c$v)/sxSX",
-                        "/($c$v)   ($v$l)/sxSX",
-                    ];
-                    break;
-                case self::NASIBULLIN_ALGORITHM:
-                default:
-                    # improved rules by Dmitry Koteroff and Rinat Nasibullin
-                    $rules = [
-                        # $1                       $2
-                        "/($x)                     ($c (?:\xcc\x81)?+ $l)/sxSX",
-                        "/($v (?:\xcc\x81)?+ $c$c) ($c$c$v)/sxSX",
-                        "/($v (?:\xcc\x81)?+ $c$c) ($c$v)/sxSX",
-                        "/($v (?:\xcc\x81)?+ $c)   ($c$c$v)/sxSX",
-                        "/($c$v (?:\xcc\x81)?+ )   ($c$v)/sxSX",
-                        "/($v (?:\xcc\x81)?+ $c)   ($c$v)/sxSX",
-                        "/($c$v (?:\xcc\x81)?+ )   ($v (?:\xcc\x81)?+ $l)/sxSX",
-                    ];
-                    break;
-            }
+        switch ($algo) {
+            case self::HRISTOFF_ALGORITHM:
+                # алгоритм П.Христова в модификации Дымченко и Варсанофьева
+                $rules = [
+                    # $1       $2
+                    "/($x)     ($l$l)/sxSX",
+                    "/($v)     ($v$l)/sxSX",
+                    "/($v$c)   ($c$v)/sxSX",
+                    "/($c$v)   ($c$v)/sxSX",
+                    "/($v$c)   ($c$c$v)/sxSX",
+                    "/($v$c$c) ($c$c$v)/sxSX",
+                ];
+                break;
+            case self::KOTEROFF_ALGORITHM:
+                # improved rules by Dmitry Koteroff
+                $rules = [
+                    # $1       $2
+                    "/($x)     ($l$l)/sxSX",
+                    "/($v$c$c) ($c$c$v)/sxSX",
+                    "/($v$c$c) ($c$v)/sxSX",
+                    "/($v$c)   ($c$c$v)/sxSX",
+                    "/($c$v)   ($c$v)/sxSX",
+                    "/($v$c)   ($c$v)/sxSX",
+                    "/($c$v)   ($v$l)/sxSX",
+                ];
+                break;
+            case self::NASIBULLIN_ALGORITHM:
+            default:
+                # improved rules by Dmitry Koteroff and Rinat Nasibullin
+                $rules = [
+                    # $1                       $2
+                    "/($x)                     ($c (?:\xcc\x81)?+ $l)/sxSX",
+                    "/($v (?:\xcc\x81)?+ $c$c) ($c$c$v)/sxSX",
+                    "/($v (?:\xcc\x81)?+ $c$c) ($c$v)/sxSX",
+                    "/($v (?:\xcc\x81)?+ $c)   ($c$c$v)/sxSX",
+                    "/($c$v (?:\xcc\x81)?+ )   ($c$v)/sxSX",
+                    "/($v (?:\xcc\x81)?+ $c)   ($c$v)/sxSX",
+                    "/($c$v (?:\xcc\x81)?+ )   ($v (?:\xcc\x81)?+ $l)/sxSX",
+                ];
+                break;
         }
+
         # \xc2\xad = &shy;  U+00AD SOFT HYPHEN
         return preg_replace($rules, "$1\xc2\xad$2", $m[0]);
     }
