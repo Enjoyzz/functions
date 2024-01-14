@@ -1,6 +1,8 @@
 <?php
 
-use Enjoys\Functions\Arrays\ArrayInsert;
+use Enjoys\Functions\Arrays;
+use Enjoys\Functions\Convert;
+use Enjoys\Functions\Filesystem;
 use Enjoys\Functions\Hyphenize;
 use Enjoys\Functions\Truncate;
 
@@ -73,14 +75,7 @@ if (!function_exists('ini_size_to_bytes')) {
      */
     function ini_size_to_bytes($phpIniSize): int
     {
-        $unit = preg_replace('/[^bkmgtp]/i', '', $phpIniSize); // Remove the non-unit characters from the size.
-        $size = preg_replace('/[^0-9.]/', '', $phpIniSize); // Remove the non-numeric characters from the size.
-        if ($unit) {
-            // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-            return (int)round($size * pow(1024, stripos('bkmgtp', $unit[0])));
-        } else {
-            return (int)round($size);
-        }
+        return Convert::iniSize2bytes($phpIniSize);
     }
 }
 
@@ -93,7 +88,7 @@ if (!function_exists('iniSize2bytes')) {
      */
     function iniSize2bytes($phpIniSize): int
     {
-        return ini_size_to_bytes($phpIniSize);
+        return Convert::iniSize2bytes($phpIniSize);
     }
 }
 
@@ -105,9 +100,7 @@ if (!function_exists('bytes_to_ini_size')) {
      */
     function bytes_to_ini_size($size = 0): string
     {
-        $size = (int)$size;
-        $filesizename = ["B", "K", "M", "G", "T", "P"];
-        return $size ? round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . $filesizename[$i] : '0B';
+        return Convert::bytes2iniSize($size);
     }
 }
 
@@ -120,84 +113,21 @@ if (!function_exists('bytes2iniSize')) {
      */
     function bytes2iniSize($size = 0): string
     {
-       return  bytes_to_ini_size($size);
+        return Convert::bytes2iniSize($size);
     }
 }
 
 if (!function_exists('getValueByIndexPath')) {
-    /**
-     *
-     * @param string $indexPath
-     * @param array $data
-     * @return mixed
-     */
-    function getValueByIndexPath(string $indexPath, $data = [])
+    function getValueByIndexPath(string $indexPath, array $data = [])
     {
-        $empty_key = 0;
-
-        preg_match_all("/^([\w\d\-]*)|\[['\"]*(|[a-z0-9_-]+)['\"]*]/i", $indexPath, $matches);
-        $last_key = array_key_last($matches[0]);
-
-        if (count($matches[0]) > 0 && !empty($matches[0][0])) {
-            foreach ($matches[0] as $identify => $key) {
-                if ($key == $indexPath && isset($data[$key])) {
-                    return $data[$key];
-                }
-
-                if (!is_array($data)) {
-                    return false;
-                }
-                $key = str_replace(['[', ']', '"', '\''], [], $key);
-                //если последняя и key пустой [] вернуть все
-                if ($identify == $last_key && in_array($key, ['', 0], true)) {
-                    if (isset($data[0]) && \count($data) > 1) {
-                        break;
-                    }
-                }
-                if ($key === '') {
-                    $key = $empty_key;
-                }
-                if (!isset($data[$key])) {
-                    return false;
-                }
-                if ($identify == $last_key && $key !== '') {
-                    if (is_array($data[$key])) {
-                        return false;
-                    }
-                }
-                $data = $data[$key];
-            }
-            return $data;
-        }
-        return false;
+        return Arrays::getValueByIndexPath($indexPath, $data);
     }
 }
 
 if (!function_exists('array_merge_recursive_distinct')) {
     function array_merge_recursive_distinct(array $array_o, array $array_i): array
     {
-        foreach ($array_i as $k => $v) {
-            if (!isset($array_o[$k])) {
-                $array_o[$k] = $v;
-            } else {
-                if (is_array($array_o[$k])) {
-                    if (is_array($v)) {
-                        $array_o[$k] = array_merge_recursive_distinct($array_o[$k], $v);
-                    } else {
-                        $array_o[$k] = $v;
-                    }
-                } else {
-                    if (!isset($array_o[$k])) {
-                        $array_o[$k] = $v;
-                    } else {
-                        $array_o[$k] = array($array_o[$k]);
-                        $array_o[$k] = $v;
-                    }
-                }
-            }
-        }
-
-        return $array_o;
+        return Arrays::mergeRecursiveDistinct($array_o, $array_i);
     }
 }
 
@@ -205,8 +135,7 @@ if (!function_exists('array_merge_recursive_distinct')) {
 if (!function_exists('array_insert_before')) {
     function array_insert_before(array $array, $key, $data): array
     {
-        $insert = new ArrayInsert($array);
-        return $insert->before($key, $data);
+        return Arrays::insertBefore($array, $key, $data);
     }
 }
 
@@ -214,7 +143,13 @@ if (!function_exists('array_insert_before')) {
 if (!function_exists('array_insert_after')) {
     function array_insert_after(array $array, $key, $data): array
     {
-        $insert = new ArrayInsert($array);
-        return $insert->after($key, $data);
+        return Arrays::insertAfter($array, $key, $data);
+    }
+}
+
+if (!function_exists('glob_recursive')) {
+    function glob_recursive(string $pattern, int $flags = 0, bool $false_return = false)
+    {
+        return Filesystem::globRecursive($pattern, $flags, $false_return);
     }
 }

@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use function Enjoys\FileSystem\copyDirectoryWithFilesRecursive;
 use function Enjoys\FileSystem\copyFile;
 use function Enjoys\FileSystem\createDirectory;
-use function Enjoys\FileSystem\CreateSymlink;
+use function Enjoys\FileSystem\makeSymlink;
 use function Enjoys\FileSystem\removeDirectoryRecursive;
 use function Enjoys\FileSystem\writeFile;
 
@@ -53,11 +53,11 @@ final class FilesystemTest extends TestCase
     public function testCreateSymlinkWhenUpFolderSymlynkAlreadyExist()
     {
         //$this->expectWarning();
-        CreateSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/test.css');
+        makeSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/test.css');
         $linkSpl = new \SplFileInfo(__DIR__ . '/_temp/fixtures/test.css');
         $this->assertTrue($linkSpl->isLink());
 
-        CreateSymlink(__DIR__ . '/_temp/fixtures', __DIR__ . '/fixtures');
+        makeSymlink(__DIR__ . '/_temp/fixtures', __DIR__ . '/fixtures');
         $linkSpl = new \SplFileInfo(__DIR__ . '/_temp/fixtures');
         $this->assertFalse($linkSpl->isLink());
     }
@@ -68,7 +68,7 @@ final class FilesystemTest extends TestCase
     public function testCreateSymlinkWhenTargetNotExist()
     {
         $this->expectException(\InvalidArgumentException::class);
-        CreateSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/invalid_target');
+        makeSymlink(__DIR__ . '/_temp/fixtures/test.css', __DIR__ . '/fixtures/invalid_target');
     }
 
     public function testCopyDirectoryWithFilesRecursive()

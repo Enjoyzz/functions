@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Enjoys\Functions\Arrays;
+namespace Enjoys\Functions;
 
 
 final class ArrayInsert
