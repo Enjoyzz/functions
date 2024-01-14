@@ -60,8 +60,7 @@ if (!function_exists('hyphenize')) {
      */
     function hyphenize(string $s, bool $isHtml = false, int $algo = Hyphenize::KOTEROFF_ALGORITHM): ?string
     {
-        $hyphenize = new Hyphenize($algo);
-        return $hyphenize->handle($s, $isHtml);
+        return Hyphenize::handle($s, $isHtml, $algo);
     }
 }
 
