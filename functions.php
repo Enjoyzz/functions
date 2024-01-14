@@ -1,5 +1,6 @@
 <?php
 
+use Enjoys\Functions\Arrays\ArrayInsert;
 use Enjoys\Functions\Hyphenize;
 use Enjoys\Functions\Truncate;
 
@@ -60,8 +61,7 @@ if (!function_exists('hyphenize')) {
      */
     function hyphenize(string $s, bool $isHtml = false, int $algo = Hyphenize::KOTEROFF_ALGORITHM): ?string
     {
-        $hyphenize = new Hyphenize($algo);
-        return $hyphenize->handle($s, $isHtml);
+        return Hyphenize::handle($s, $isHtml, $algo);
     }
 }
 
@@ -205,7 +205,7 @@ if (!function_exists('array_merge_recursive_distinct')) {
 if (!function_exists('array_insert_before')) {
     function array_insert_before(array $array, $key, $data): array
     {
-        $insert = new \Enjoys\Functions\Arrays\ArrayInsert($array);
+        $insert = new ArrayInsert($array);
         return $insert->before($key, $data);
     }
 }
@@ -214,7 +214,7 @@ if (!function_exists('array_insert_before')) {
 if (!function_exists('array_insert_after')) {
     function array_insert_after(array $array, $key, $data): array
     {
-        $insert = new \Enjoys\Functions\Arrays\ArrayInsert($array);
+        $insert = new ArrayInsert($array);
         return $insert->after($key, $data);
     }
 }

@@ -29,21 +29,7 @@ final class Hyphenize
     const KOTEROFF_ALGORITHM = 1;
     const NASIBULLIN_ALGORITHM = 2;
 
-    /**
-     * @var int
-     */
-    private $algo;
-
-    /**
-     * Hyphenize constructor.
-     * @param int $algo
-     */
-    public function __construct($algo = self::KOTEROFF_ALGORITHM)
-    {
-        $this->algo = $algo;
-    }
-
-    public function handle(string $s, bool $isHtml = false): ?string
+    public static function handle(string $s, bool $isHtml = false, int $algo = self::KOTEROFF_ALGORITHM): ?string
     {
         /*
           TODO
@@ -59,7 +45,7 @@ final class Hyphenize
         if (!$isHtml) {
             $m = [$s];
             $m[3] = &$m[0];
-            return $this->hyphenize($m);
+            return self::hyphenize($m, $algo);
         }
 
         $regexp = '/(?> #встроенный PHP, Perl, ASP код
@@ -105,7 +91,7 @@ final class Hyphenize
         return preg_replace_callback($regexp, ['self', 'hyphenize'], $s);
     }
 
-    private function hyphenize(array $m)
+    private static function hyphenize(array $m, int $algo)
     {
         if (strlen($m[0]) < 4 || !@$m[3]) {
             return $m[0];
@@ -134,7 +120,7 @@ final class Hyphenize
             #специальные
             $x = '(?:\xd0[\x99\xaa\xac\xb9]|\xd1[\x8a\x8c])';   #ЙЪЬйъь (специальные)
 
-            switch ($this->algo) {
+            switch ($algo) {
                 case 0:
                     # алгоритм П.Христова в модификации Дымченко и Варсанофьева
                     $rules = [
