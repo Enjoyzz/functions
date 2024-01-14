@@ -57,13 +57,12 @@ if (!function_exists('hyphenize')) {
     /**
      * Расстановка "мягких" переносов в словах.
      * @param string $s
-     * @param bool $isHtml
      * @param int $algo \Enjoys\Functions\Hyphenize::KOTEROFF_ALGORITHM, HRISTOFF_ALGORITHM, NASIBULLIN_ALGORITHM
      * @return string|null
      */
-    function hyphenize(string $s, bool $isHtml = false, int $algo = Hyphenize::KOTEROFF_ALGORITHM): ?string
+    function hyphenize(string $s,  int $algo = Hyphenize::KOTEROFF_ALGORITHM): ?string
     {
-        return Hyphenize::handle($s, $isHtml, $algo);
+        return Hyphenize::handle($s, $algo);
     }
 }
 

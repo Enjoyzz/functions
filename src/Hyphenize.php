@@ -29,7 +29,7 @@ final class Hyphenize
     const KOTEROFF_ALGORITHM = 1;
     const NASIBULLIN_ALGORITHM = 2;
 
-    public static function handle(string $s, bool $isHtml = false, int $algo = self::KOTEROFF_ALGORITHM): ?string
+    public static function handle(string $s, int $algo = self::KOTEROFF_ALGORITHM): ?string
     {
         /*
           TODO
@@ -41,54 +41,11 @@ final class Hyphenize
         $s = str_replace("\xc2\xad", '', $s);  #remove all hyphens (repair text)
         if (strlen($s) < 4) {
             return $s;
-        }#speed improve
-        if (!$isHtml) {
-            $m = [$s];
-            $m[3] = &$m[0];
-            return self::hyphenize($m, $algo);
         }
 
-        $regexp = '/(?> #встроенный PHP, Perl, ASP код
-                    <([\?\%]) .*? \\1>  #1
-
-                    #блоки CDATA
-                  | <\!\[CDATA\[ .*? \]\]>
-
-                    #MS Word таги типа "<![if! vml]>...<![endif]>",
-                    #условное выполнение кода для IE типа "<!--[if lt IE 7]>...<![endif]-->"
-                  | <\! (?>--)?
-                        \[
-                        (?> [^\]"\']+ | "[^"]*" | \'[^\']*\' )*
-                        \]
-                        (?>--)?
-                    >
-
-                    #комментарии
-                  | <\!-- .*? -->
-
-                    #парные таги вместе с содержимым
-                  | <((?i:noindex|script|style|comment|button|map|iframe|frameset|object|applet))' . HTML::$re_attrs . '(?<!\/)>
-                      .*?
-                    <\/(?i:\\2)>  #2
-
-                    #парные и непарные таги
-                  | <[\/\!]?+ [a-zA-Z][a-zA-Z\d]*+ ' . HTML::$re_attrs . '>
-
-                    #html сущности (&lt; &gt; &amp;) (+ корректно обрабатываем код типа &amp;amp;nbsp;)
-                  | &(?>
-                        (?> [a-zA-Z][a-zA-Z\d]++
-                          | \#(?> \d{1,4}+
-                                | x[\da-fA-F]{2,4}+
-                              )
-                        );
-                     )+
-                )+
-                #\K  #PCRE 7.0+ / PHP >= 5.2.6
-
-                #не html таги и не сущности
-                | ([^<&]++)  #3
-               /sxSX';
-        return preg_replace_callback($regexp, ['self', 'hyphenize'], $s);
+        $m = [$s];
+        $m[3] = &$m[0];
+        return self::hyphenize($m, $algo);
     }
 
     private static function hyphenize(array $m, int $algo)
